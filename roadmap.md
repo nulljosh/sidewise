@@ -185,3 +185,6 @@ Not worth it at current traffic, revisit if the reader gets real users.
 - ASC shows MAC_OS 1.0 REJECTED, submission 00f546b4 UNRESOLVED_ISSUES. iOS 1.0 still WAITING_FOR_REVIEW.
 - Rejection reason unread: `asc web` login has 503'd at signin init for a week; Chrome ASC session also logged out (authResult=FAILED). Needs Joshua to sign in to ASC manually and paste the Resolution Center message.
 - Likely 4.3(a) like the other seven apps; do not resubmit, reply in Resolution Center.
+
+## TUI pilot (2026-09-05)
+- `sidewise-tui` SwiftPM target (SwiftTUI). `swift build && ./.build/debug/sidewise-tui 5` lists top stories from /api/stories with source count. Needs a real TTY.

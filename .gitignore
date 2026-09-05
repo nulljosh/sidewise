@@ -4,3 +4,4 @@
 node_modules
 signing/
 .asc/artifacts/
+.build/
