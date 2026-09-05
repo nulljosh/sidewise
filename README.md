@@ -12,7 +12,7 @@ and flags the **blindspots**: stories only one side is covering. Free. No accoun
 Two feeds from one newsroom count as one voice. A publisher can't run an opinion section next
 to its main feed and call that two sources.
 
-Four ways in: a [web reader](https://sidewise.heyitsmejosh.com), native [iPhone, iPad and Mac apps](https://sidewise.heyitsmejosh.com/app), a JSON API, and an MCP server.
+Five ways in: a [web reader](https://sidewise.heyitsmejosh.com), native [iPhone, iPad and Mac apps](https://sidewise.heyitsmejosh.com/app), a JSON API, an MCP server, and a terminal client (`swift build && ./.build/debug/sidewise-tui 5` — see [tui/](tui/)).
 
 ## Apps
 
