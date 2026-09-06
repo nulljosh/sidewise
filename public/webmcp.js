@@ -14,7 +14,7 @@
   // this whole schema against src/mcp.js's TOOLS, whose `enum` here is derived from OUTLETS.
   const OUTLETS = [
     'CBC', 'The Guardian', 'NPR', 'BBC', 'Global News', 'National Post', 'Fox News',
-    'NY Post', 'Daily Wire', 'Hacker News', 'Daring Fireball', 'NBC News', 'Wall Street Journal',
+    'NY Post', 'Daily Wire', 'Hacker News', 'Daring Fireball', 'NBC News', 'Washington Post', 'Wall Street Journal',
     'New York Post Opinion', 'Vancouver Sun', 'The Province',
   ];
 
