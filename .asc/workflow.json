@@ -1,0 +1,33 @@
+// Release automation. Run: asc workflow run ship-ios VERSION:x.y.z
+{
+  "env": {
+    "IOS_APP_ID": "6806028670",
+    "VERSION": "",
+    "SUBMIT": "true"
+  },
+  "before_all": "asc auth status",
+  "workflows": {
+    "ship-ios": {
+      "description": "Bump, archive, upload, submit iOS",
+      "steps": [
+        {
+          "name": "bump",
+          "run": "cd ios && asc xcode version edit --version \"$VERSION\" --build-number \"$(date +%Y%m%d%H%M)\""
+        },
+        {
+          "name": "archive",
+          "run": "cd ios && asc xcode archive --project Sidewise.xcodeproj --scheme Sidewise-iOS --archive-path ../.asc/artifacts/Sidewise.xcarchive --overwrite --xcodebuild-flag=-skipPackagePluginValidation --xcodebuild-flag=-allowProvisioningUpdates --output json"
+        },
+        {
+          "name": "export",
+          "run": "cd ios && asc xcode export --archive-path ../.asc/artifacts/Sidewise.xcarchive --export-options ExportOptions.plist --xcodebuild-flag=-allowProvisioningUpdates --overwrite --ipa-path ../.asc/artifacts/Sidewise.ipa --output json"
+        },
+        {
+          "name": "publish",
+          "if": "SUBMIT",
+          "run": "asc publish appstore --app $IOS_APP_ID --ipa .asc/artifacts/Sidewise.ipa --version $VERSION --wait --submit --confirm --output json"
+        }
+      ]
+    }
+  }
+}
