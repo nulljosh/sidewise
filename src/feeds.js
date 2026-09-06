@@ -13,6 +13,8 @@ export const FEEDS = [
   // Dropped 2026-08-09, all silently contributing zero items: Reuters killed its public RSS
   // (feeds.reuters.com no longer resolves), AP never had one (the rsshub.app mirror now 403s),
   // MSNBC and CTV both 404, and the Washington Post feed 301s to a dead end.
+  // 2026-09-06 recheck: Washington Post is back (feeds.washingtonpost.com/rss/world, fresh
+  // items), re-added below. The other five are still dead or frozen.
   //
   // Dropped 2026-08-13 — CNN. A different and nastier failure than the ones above: every
   // rss.cnn.com path still answers 200 with a well-formed feed, so a "does it return items?"
@@ -28,6 +30,7 @@ export const FEEDS = [
   ['Hacker News', 0, 'https://hnrss.org/frontpage'], // tech, no political lean
   ['Daring Fireball', 0, 'https://daringfireball.net/feeds/main'], // tech commentary, no political lean
   ['NBC News', -1, 'https://feeds.nbcnews.com/nbcnews/public/news'],
+  ['Washington Post', -1, 'https://feeds.washingtonpost.com/rss/world'],
   // feeds.a.dj.com froze 2025-01-27 (same zombie pattern as CNN); dowjones.io is the live host.
   ['Wall Street Journal', 1, 'https://feeds.content.dowjones.io/public/rss/RSSWorldNews'],
   ['New York Post Opinion', 2, 'https://nypost.com/opinion/feed/', 'NY Post'],

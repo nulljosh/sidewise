@@ -104,7 +104,7 @@ Dropped 5 dead feeds (all silently returning nothing): Reuters (public RSS disco
 ## Next
 
 - [ ] Post to Show HN and r/mcp. Drafts ready in LAUNCH.md, waiting on posting.
-- [ ] Re-check the 6 dropped feeds occasionally (Reuters, AP, MSNBC, CTV, Washington Post, CNN);
+- [ ] Re-check the 5 dropped feeds occasionally (Reuters, AP, MSNBC, CTV, CNN; Washington Post re-added 2026-09-06);
       re-add any that publish an official feed again. `npm run feeds` covers the live ones.
 - [ ] iOS companion app, deferred. When picked up: fetch `/api/stories`, list + detail or grouped-by-bias view. Reuse the xcodegen pattern from `journal/ios/` (smallest existing example): `project.yml` + `Sources/Shared/{Models,Services,Views}` + `Sources/iOS/`, plain `URLSession.shared.data(from:)` in an `ObservableObject` service, no auth needed since the API is public/unauthenticated.
 
