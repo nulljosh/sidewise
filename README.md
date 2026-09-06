@@ -14,6 +14,12 @@ to its main feed and call that two sources.
 
 Five ways in: a [web reader](https://sidewise.heyitsmejosh.com), native [iPhone, iPad and Mac apps](https://sidewise.heyitsmejosh.com/app), a JSON API, an MCP server, and a terminal client (`swift build && ./.build/debug/sidewise-tui 5` — see [tui/](tui/)).
 
+## Screenshots
+
+<p>
+<img src="screenshots/raw/main.png" alt="Sidewise">
+</p>
+
 ## Apps
 
 SwiftUI, one codebase for iOS and macOS, in `ios/`. It reads the same public API. No account,
