@@ -4,60 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sidewise — headlines across the political spectrum</title>
-<meta name="description" content="Headlines from 17 news outlets with left/center/right bias tags and blindspot detection: stories covered by only one side.">
+<meta name="description" content="Headlines from news outlets across the political spectrum with left/center/right bias tags and blindspot detection: stories covered by only one side.">
 <meta name="theme-color" content="#1f4e79">
 <meta property="og:title" content="Sidewise — headlines across the political spectrum">
-<meta property="og:description" content="Headlines from 17 news outlets with left/center/right bias tags and blindspot detection: stories covered by only one side.">
+<meta property="og:description" content="Headlines from news outlets across the political spectrum with left/center/right bias tags and blindspot detection: stories covered by only one side.">
 <meta property="og:type" content="website">
 <link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="devices.css">
 <style>
-@import url("https://heyitsmejosh.com/tokens.css");
-
-:root {
-  --accent: #1f4e79;
-  --accent-soft: #e9eff5;
-  --bg: #ffffff;
-  --bg2: #f7f7f8;
-  --text: #1c1d22;
-  --text2: #5c5f6a;
-  --border: #e6e7ea;
-  --font-body: -apple-system, system-ui, "Inter", "Segoe UI", sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #121316;
-    --link: #6787a4;
-    --bg2: #1a1b1f;
-    --text: #ececf0;
-    --text2: rgba(236,236,240,0.62);
-    --border: rgba(236,236,240,0.12);
-    --accent-soft: #141a20;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #121316;
-  --bg2: #1a1b1f;
-  --text: #ececf0;
-  --text2: rgba(236,236,240,0.62);
-  --border: rgba(236,236,240,0.12);
-  --accent-soft: #141a20;
-}
-
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-::selection { background: var(--accent); color: #fff; }
-a { color: var(--link, var(--accent)); text-decoration: none; }
-a:hover { text-decoration: underline; }
-img { max-width: 100%; }
 
 .container { max-width: 760px; margin: 0 auto; padding: 0 1.5rem; }
 
@@ -118,20 +74,6 @@ img { max-width: 100%; }
 }
 
 .buttons { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
-.btn {
-  display: inline-block;
-  padding: 0.7rem 1.5rem;
-  border-radius: 100px;
-  font-size: 0.98rem;
-  font-weight: 600;
-  border: 1.5px solid transparent;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-}
-.btn:hover { text-decoration: none; transform: translateY(-1px); }
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { opacity: 0.9; }
-.btn-outline { border-color: var(--border); color: var(--text); background: var(--bg); }
-.btn-outline:hover { border-color: var(--link, var(--accent)); color: var(--link, var(--accent)); }
 
 section { padding: 4rem 0; }
 .features h2, .closing h2 {
@@ -146,12 +88,6 @@ section { padding: 4rem 0; }
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
 }
-.feature {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1.4rem;
-}
 .feature h3 { font-size: 1rem; font-weight: 650; margin-bottom: 0.4rem; }
 .feature p { font-size: 0.93rem; color: var(--text2); }
 
@@ -160,25 +96,37 @@ section { padding: 4rem 0; }
 
 footer { padding: 2.5rem 0 3.5rem; text-align: center; font-size: 0.9rem; color: var(--text2); }
 footer p + p { margin-top: 0.35rem; }
+
+/* Live demo: the real reader, running, in a frame matching the visitor's device. */
+.demo { margin: 2rem auto 2.25rem; text-align: center; position: relative; z-index: 2; }
+.demo .device-screen { aspect-ratio: 9/19.5; }
+.demo .device-mac .device-screen, .demo .device-windows .device-screen { aspect-ratio: 16/10; }
+.demo .device-screen iframe {
+  position: absolute; top: 0; left: 0; border: 0; display: block;
+  transform-origin: 0 0; width: 390px; height: 845px; background: var(--bg);
+}
+.demo .device-mac .device-screen iframe, .demo .device-windows .device-screen iframe {
+  width: 1024px; height: 640px;
+}
+.demo-caption { font-size: .9rem; color: var(--text2); margin: 1rem 0 0; }
 </style>
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="devices.css">
 <script>
-// ponytail: UA sniff, good enough for a mockup. iphone is the default. ?embed = app only, for the landing demo frame.
-(function(u,d){d=/Android/.test(u)?'android':/iPhone|iPad/.test(u)?'iphone':/Windows/.test(u)?'windows':/Mac/.test(u)?'mac':'iphone';document.documentElement.dataset.device=d;if(/[?&]embed\b/.test(location.search))document.documentElement.classList.add('embed')})(navigator.userAgent);
+// ponytail: UA sniff, good enough for picking a frame. iphone is the default.
+(function (u) {
+  var d = /Android/.test(u) ? 'android'
+    : /iPhone|iPad/.test(u) ? 'iphone'
+    : /Windows/.test(u) ? 'windows'
+    : /Mac/.test(u) ? 'mac'
+    // Linux/X11 desktops used to fall through to the iPhone default and got a 280px phone
+    // on a 1400px screen. A plain desktop window is the closer lie.
+    : /Linux|X11|CrOS/.test(u) ? 'windows'
+    : 'iphone';
+  document.documentElement.dataset.device = d;
+})(navigator.userAgent);
 </script>
-<style>
-/* Live demo: the real app in a frame matching the visitor's device (nimble treatment) */
-.demo{margin:2rem auto 0;text-align:center;position:relative;z-index:2}
-.demo .device-screen{aspect-ratio:9/19.5}
-.demo .device-mac .device-screen,.demo .device-windows .device-screen{aspect-ratio:16/10}
-.demo .device-screen iframe{position:absolute;top:0;left:0;border:0;display:block;transform-origin:0 0;width:390px;height:845px;background:#fff}
-.demo .device-mac .device-screen iframe,.demo .device-windows .device-screen iframe{width:1024px;height:640px}
-.demo-caption{font-size:.9rem;opacity:.65;margin:1rem 0 0}
-.embed .demo,.embed footer,.embed nav{display:none!important}
-</style>
 </head>
 <body>
 
@@ -187,22 +135,22 @@ footer p + p { margin-top: 0.35rem; }
   <div class="container">
     <img class="hero-icon" src="icon.svg" alt="Sidewise icon" width="88" height="88">
     <h1>Sidewise</h1>
-    <p>Headlines from 16 outlets across the political spectrum, tagged left, center, and right — with blindspot detection for the stories only one side is covering.</p>
-<div class="demo">
-  <div class="device device-iphone" id="demoFrame" data-title="Sidewise"><div class="device-screen"><iframe id="demoApp" title="Sidewise, live" loading="lazy" data-src="/app.html"></iframe></div></div>
-  <p class="demo-caption">This is the <span id="demoDev">iPhone</span> app, live. Try it.</p>
-</div>
-<script>
-(function(){var names={iphone:'iPhone',android:'Android',mac:'Mac',windows:'Windows'},dev=document.documentElement.dataset.device,f=document.getElementById('demoFrame'),i=document.getElementById('demoApp');
-if(!names[dev])dev='iphone';f.className='device device-'+dev;document.getElementById('demoDev').textContent=names[dev];
-if(!document.documentElement.classList.contains('embed'))i.src=i.dataset.src;
-function fit(){i.style.transform='scale('+(i.parentNode.clientWidth/i.offsetWidth)+')';}fit();addEventListener('resize',fit);})();
-</script>
+    <p>Headlines from <span data-outlets>17</span> outlets across the political spectrum, tagged
+      left, center, and right — with blindspot detection for the stories only one side is covering.</p>
+
+    <div class="demo">
+      <div class="device device-iphone" id="demoFrame" data-title="Sidewise">
+        <div class="device-screen">
+          <iframe id="demoApp" title="Sidewise, live" loading="lazy" data-src="/reader.html?embed"></iframe>
+        </div>
+      </div>
+      <p class="demo-caption">This is the <span id="demoDev">iPhone</span> app, live. Try it.</p>
+    </div>
 
     <div class="buttons">
       <a href="/reader.html" class="btn btn-primary">Open the reader</a>
       <a href="/app.html" class="btn btn-outline">Get the apps</a>
-      <a href="https://github.com/nulljosh/newsline" class="btn btn-outline">Source</a>
+      <a href="https://github.com/nulljosh/sidewise" class="btn btn-outline">Source</a>
     </div>
   </div>
 </section>
@@ -211,27 +159,27 @@ function fit(){i.style.transform='scale('+(i.parentNode.clientWidth/i.offsetWidt
   <div class="container">
     <h2>See the whole picture, including the gaps</h2>
     <div class="grid">
-      <div class="feature">
+      <div class="feature card">
         <h3>Bias tags on every story</h3>
         <p>Each outlet is tagged left, center, or right so you can see who is covering what.</p>
       </div>
-      <div class="feature">
+      <div class="feature card">
         <h3>Blindspot detection</h3>
         <p>Surfaces stories that only one side of the spectrum is reporting at all.</p>
       </div>
-      <div class="feature">
-        <h3>16 outlets in one feed</h3>
+      <div class="feature card">
+        <h3><span data-outlets>17</span> outlets in one feed</h3>
         <p>National, international, and local wires pulled together into a single timeline.</p>
       </div>
-      <div class="feature">
+      <div class="feature card">
         <h3>A free public API</h3>
         <p>JSON API and an MCP server. No key, no account, no rate limit.</p>
       </div>
-      <div class="feature">
+      <div class="feature card">
         <h3>Native iPhone, iPad, and Mac apps</h3>
         <p>One SwiftUI codebase. Saved stories and the feed cache stay on device.</p>
       </div>
-      <div class="feature">
+      <div class="feature card">
         <h3>No tracking</h3>
         <p>No account to create, nothing logged about what you read.</p>
       </div>
@@ -252,16 +200,42 @@ function fit(){i.style.transform='scale('+(i.parentNode.clientWidth/i.offsetWidt
 <footer>
   <div class="container">
     <p>Sidewise &mdash; by <a href="https://heyitsmejosh.com">Joshua Trommel</a></p>
-    <p><a href="https://github.com/nulljosh/newsline">Source on GitHub</a> &middot; <a href="https://github.com/nulljosh/newsline/blob/main/docs/API.md">API</a></p>
+    <p><a href="https://github.com/nulljosh/sidewise">Source on GitHub</a> &middot; <a href="https://github.com/nulljosh/sidewise/blob/main/docs/API.md">API</a> &middot; <a href="/privacy.html">Privacy</a></p>
   </div>
 </footer>
 
 <script>
+// The demo frame: pick the device, point it at the real reader, and scale the 390px-wide
+// (or 1024px, on desktop frames) viewport down to whatever the frame's screen ended up being.
+(function () {
+  var names = { iphone: 'iPhone', android: 'Android', mac: 'Mac', windows: 'Windows' };
+  var dev = document.documentElement.dataset.device;
+  var frame = document.getElementById('demoFrame');
+  var iframe = document.getElementById('demoApp');
+  if (!names[dev]) dev = 'iphone';
+  frame.className = 'device device-' + dev;
+  document.getElementById('demoDev').textContent = names[dev];
+
+  function fit() {
+    // clientWidth excludes the frame's bezel border, which is what the screen really is.
+    var screen = iframe.parentNode;
+    if (!screen.clientWidth || !iframe.offsetWidth) return;
+    iframe.style.transform = 'scale(' + (screen.clientWidth / iframe.offsetWidth) + ')';
+  }
+  // Fit now for the initial layout, again once the reader has painted, and on every resize:
+  // the first call can land before webfonts and devices.css have settled the frame's width.
+  fit();
+  iframe.addEventListener('load', fit);
+  addEventListener('resize', fit);
+  addEventListener('load', fit);
+  iframe.src = iframe.dataset.src;
+})();
+</script>
+
+<script>
 // Wall of real headlines pulled from our own /api/stories. A fetch failure (or an
 // empty feed) just leaves the plain hero -- same fail-soft as the rest of the site.
-// Note: the API does not surface an article image yet, so these are text tiles;
-// swap in thumbnails once /api/stories emits `image`.
-fetch('/api/stories').then(function (r) { return r.json(); }).then(function (data) {
+fetch('/api/stories?view=latest').then(function (r) { return r.json(); }).then(function (data) {
   var items = (data.latest || []).filter(function (x) { return x && x.title; });
   if (items.length < 8) return;
   var wall = document.getElementById('heroWall');
@@ -288,6 +262,15 @@ fetch('/api/stories').then(function (r) { return r.json(); }).then(function (dat
     });
     wall.appendChild(col);
   }
+}).catch(function () {});
+
+// The outlet count is derived, never typed: it has drifted to 22/17/16 across the site
+// before. /api/sources is the same FEEDS list the reader and the API serve from.
+fetch('/api/sources').then(function (r) { return r.json(); }).then(function (d) {
+  if (!d || !d.count) return;
+  document.querySelectorAll('[data-outlets]').forEach(function (el) {
+    el.textContent = d.count;
+  });
 }).catch(function () {});
 </script>
 

@@ -1,7 +1,8 @@
 // ponytail: network-first for pages, cache-first for the hashed assets they name.
 // Bump CACHE to evict everything a previous version stored.
-const CACHE = "sidewise-v3";
-const FILES = ["/", "/app.html","/index.html","/privacy.html","/reader.html", "/manifest.webmanifest"];
+const CACHE = "sidewise-v4";
+const FILES = ["/", "/app.html", "/index.html", "/privacy.html", "/reader.html",
+  "/theme.css", "/devices.css", "/icon.svg", "/manifest.webmanifest"];
 
 self.addEventListener("install", e => {
   // A single missing file fails the whole addAll, so tolerate misses.
