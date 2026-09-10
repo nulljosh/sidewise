@@ -31,7 +31,9 @@
   footer { margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border);
     font-size: .85rem; color: var(--text2); }
   footer a { margin-right: .9rem; white-space: nowrap; }
+  .embed .topbar, .embed h1, .embed .lede { display: none; }
 </style>
+<script>if(/[?&]embed\b/.test(location.search))document.documentElement.classList.add('embed')</script>
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#1f4e79">
   <link rel="apple-touch-icon" href="/icon-192.png">
