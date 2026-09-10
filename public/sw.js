@@ -1,8 +1,8 @@
 // ponytail: network-first for pages, cache-first for the hashed assets they name.
 // Bump CACHE to evict everything a previous version stored.
-const CACHE = "sidewise-v4";
+const CACHE = "sidewise-v5";
 const FILES = ["/", "/app.html", "/index.html", "/privacy.html", "/reader.html",
-  "/theme.css", "/devices.css", "/icon.svg", "/manifest.webmanifest"];
+  "/reader.js", "/reader-state.js", "/theme.css", "/devices.css", "/icon.svg", "/manifest.webmanifest"];
 
 self.addEventListener("install", e => {
   // A single missing file fails the whole addAll, so tolerate misses.
@@ -28,6 +28,16 @@ const save = (req, res) => {
 self.addEventListener("fetch", e => {
   // Same-origin GETs only; APIs are cross-origin and stay network-only.
   if (e.request.method !== "GET" || new URL(e.request.url).origin !== location.origin) return;
+
+  // Unversioned reader code and news must refresh before falling back offline.
+  const path = new URL(e.request.url).pathname;
+  if (path.startsWith('/api/') || path.endsWith('.js') || path.endsWith('.css')) {
+    e.respondWith(fetch(e.request).then(res => {
+      if (res.ok) e.waitUntil(caches.open(CACHE).then(c => c.put(e.request, res.clone())));
+      return res;
+    }).catch(() => caches.match(e.request).then(hit => hit || Response.error())));
+    return;
+  }
 
   // HTML must never come from cache first: it names the hashed bundles, so one
   // stale page pins a whole stale build and the site stops shipping updates to

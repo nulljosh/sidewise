@@ -130,9 +130,9 @@ suspension. Do not submit it in this state.
 
 Worker, API and test layers landed (see commit). Not started, in priority order:
 
-- [ ] Extract the reader's inline JS to `public/reader.js` so it can be unit-tested in Node,
+- [x] Extract the reader's inline JS to `public/reader.js` so it can be unit-tested in Node,
       then add `test/reader.test.mjs` (escaping, filter state, timeAgo).
-- [ ] PWA layer: `manifest.webmanifest`, a service worker caching the shell + last payload,
+- [x] PWA layer: `manifest.webmanifest`, a service worker caching the shell + last payload,
       `apple-touch-icon`, `theme-color`. Cheapest path to offline parity with the native app.
 - [ ] Reader UX: URL-encoded filter state (`?tab=&q=&outlet=`) for deep links and back-button,
       saved stories in localStorage, `role="tablist"`/`aria-selected`/`aria-live`, labels on the
@@ -188,3 +188,7 @@ Not worth it at current traffic, revisit if the reader gets real users.
 
 ## TUI pilot (2026-09-05)
 - `sidewise-tui` SwiftPM target (SwiftTUI). `swift build && ./.build/debug/sidewise-tui 5` lists top stories from /api/stories with source count. Needs a real TTY.
+
+## 2026-09-10 reader improvements
+
+Shareable filters and Back navigation, safe headline rendering, a retry button, feed outage notices, developing tags, and publisher-based counts are implemented. The service worker refreshes news before using an offline fallback. All 108 tests pass. Browser checks cover filter restoration, unsafe links, and outage notices. Saved stories, richer story previews, and comparison remain open.
