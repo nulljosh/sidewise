@@ -130,10 +130,6 @@ suspension. Do not submit it in this state.
 
 Worker, API and test layers landed (see commit). Not started, in priority order:
 
-- [x] Extract the reader's inline JS to `public/reader.js` so it can be unit-tested in Node,
-      then add `test/reader.test.mjs` (escaping, filter state, timeAgo).
-- [x] PWA layer: `manifest.webmanifest`, a service worker caching the shell + last payload,
-      `apple-touch-icon`, `theme-color`. Cheapest path to offline parity with the native app.
 - [ ] Reader UX: URL-encoded filter state (`?tab=&q=&outlet=`) for deep links and back-button,
       saved stories in localStorage, `role="tablist"`/`aria-selected`/`aria-live`, labels on the
       search and source inputs, loading skeletons, a retry button, local CSS token fallbacks so
