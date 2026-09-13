@@ -4,9 +4,10 @@
 
 What is the other side reading?
 
-Sidewise pulls headlines from newsrooms across the spectrum, clusters the same story
-together, tags each source left, center or right, and flags the blindspots: stories
-only one side is covering. Live at
+Reading news from one feed means never seeing the stories that feed chose to skip.
+Sidewise exists to surface exactly that gap: it pulls headlines from newsrooms across
+the spectrum, clusters the same story together, tags each source left, center or right,
+and flags the blindspots, stories only one side is covering. Live at
 [sidewise.heyitsmejosh.com](https://sidewise.heyitsmejosh.com).
 
 This paper leads with the clustering algorithm. Everything else is supporting
@@ -14,19 +15,25 @@ detail.
 
 ## Story Clustering Algorithm
 
-The core bet is that same-story detection doesn't need embeddings or an LLM , 
-title-keyword overlap is enough at headline scale.
+The core bet is that same-story detection doesn't need embeddings or an LLM,
+title-keyword overlap is enough at headline scale, and skipping both keeps the
+whole pipeline running on one Worker with no model cost and no external call
+in the hot path.
 
 1. **Normalize**: each headline is lowercased, stripped of punctuation and
    stopwords, and reduced to a keyword set.
 2. **Cluster**: headlines are compared pairwise by keyword-set overlap. Two
    headlines sharing enough keywords join the same cluster; clusters merge
-   transitively. One pass over the feed is enough at ~15 sources.
+   transitively. One pass over the feed is enough at ~15 sources, so there's
+   no need for the indexing complexity a larger feed set would demand.
 3. **Bias tag**: every source carries a static left/center/right label
-   (declared in the `FEEDS` table at the top of `worker.js`). A cluster's
+   (declared in the `FEEDS` table at the top of `worker.js`), a fixed label
+   rather than a computed one because bias classification is a judgment call
+   that should be visible and editable, not a black box. A cluster's
    coverage profile is just the set of bias labels of its members.
 4. **Blindspot**: a cluster covered by only one side of the spectrum is
-   flagged as a blindspot story.
+   flagged as a blindspot story, since that's the whole reason to build this
+   over a normal aggregator: showing what a single-source reader would never see.
 
 ## Feed Pipeline
 
@@ -38,8 +45,10 @@ parallel and serves one `/api/stories` response with two views:
 - **`stories`**: the bias-clustered view above.
 
 Each feed has its own error boundary; a dead source returns nothing instead of
-blocking the rest. The parser handles both RSS 2.0 and Atom. Adding a source
-is one line: `[outlet, bias, url]` appended to `FEEDS`.
+blocking the rest, because one broken feed shouldn't take down the whole
+briefing. The parser handles both RSS 2.0 and Atom. Adding a source
+is one line: `[outlet, bias, url]` appended to `FEEDS`, keeping the source list
+itself the only thing that has to grow as more outlets get added.
 
 ## Sources
 
@@ -49,7 +58,8 @@ Global News · National Post · Fox News · NY Post · Daily Wire · Hacker News
 ## Frontend
 
 `public/index.html`, served by the same Worker via Workers Static Assets, one
-deploy ships page and API together. Latest reader with a per-source picker and
+deploy ships page and API together so the frontend and the API it depends on
+can never drift a version apart. Latest reader with a per-source picker and
 search, plus tabs into the bias view. No framework, no build step.
 
 ## Testing and Deploy
@@ -59,9 +69,10 @@ search, plus tabs into the bias view. No framework, no build step.
 
 ## Native apps
 
-SwiftUI iOS and macOS readers hit the same `/api/stories` endpoint. Built
-2026-08-11, not yet submitted to the App Store. The same feed API also backs
-Inkpress's seeded subscription list and the `/news` briefing skill.
+SwiftUI iOS and macOS readers hit the same `/api/stories` endpoint, so the
+clustering and bias logic exists in exactly one place regardless of platform.
+Built 2026-08-11, not yet submitted to the App Store. The same feed API also
+backs Inkpress's seeded subscription list and the `/news` briefing skill.
 
 ## Planned: Inverted-Index Clustering
 
