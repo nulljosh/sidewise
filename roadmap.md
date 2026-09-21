@@ -146,8 +146,6 @@ Done. 4 tools reusing the exact names and schemas of the existing `POST /mcp` se
 
 See `docs/API.md` for the full tool table, linked from the README.
 
-## From Notes (imported 2026-08-27)
-
 ## Cold-pull latency (measured 2026-08-31)
 `/api/stories` cold = 2.75s, warm = 0.10s. The 120s Cache-API TTL means one caller per colo
 per 2 min eats the full 16-feed fan-out. A cron warm only fixes the colo the cron lands in
