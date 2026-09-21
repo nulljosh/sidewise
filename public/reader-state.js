@@ -10,10 +10,14 @@ export function timeAgo(ts, now = Date.now()) {
   if (m < 1440) return `${Math.round(m / 60)}h ago`;
   return `${Math.round(m / 1440)}d ago`;
 }
+export function firstSeenLabel(ts, now = Date.now()) {
+  const t = timeAgo(ts, now);
+  return t ? `first seen ${t}` : '';
+}
 export function readFilters(search) {
   const p = new URLSearchParams(search);
   const tab = p.get('tab');
-  return { filter: ['latest','all','l','c','r','blindspot'].includes(tab) ? tab : 'latest', query: p.get('q') || '', source: p.get('outlet') || '' };
+  return { filter: ['latest','all','l','c','r','blindspot','saved'].includes(tab) ? tab : 'latest', query: p.get('q') || '', source: p.get('outlet') || '' };
 }
 export function filterURL(href, {filter, query, source}) {
   const u = new URL(href);

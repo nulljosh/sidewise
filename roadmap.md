@@ -118,12 +118,6 @@ suspension. Do not submit it in this state.
 
 Worker, API and test layers landed (see commit). Not started, in priority order:
 
-- [ ] Reader UX: URL-encoded filter state (`?tab=&q=&outlet=`) for deep links and back-button,
-      saved stories in localStorage, `role="tablist"`/`aria-selected`/`aria-live`, labels on the
-      search and source inputs, loading skeletons, a retry button, local CSS token fallbacks so
-      the page survives `heyitsmejosh.com/tokens.css` failing to load.
-- [ ] Surface the new API fields in the reader: `health.down` (say when feeds are down instead
-      of showing a thin feed), `developing`, `firstSeen`, `summary`, `image`.
 - [ ] Web compare view backed by `?compare=true` / the `compare_coverage` MCP tool.
 - [ ] **iOS/macOS depth**, the Guideline 4.2 blocker below is still open. Planned: a compare
       view (columns per side + the word-diff `distinctive()` already computes server-side),

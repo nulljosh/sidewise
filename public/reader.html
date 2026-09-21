@@ -59,11 +59,29 @@ if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add(
   .src:last-child { border-bottom: none; }
   .src .o { color: var(--text2); font-size: .8rem; }
 
-  .item { display: block; padding: .8rem 0; border-bottom: 1px solid var(--border); color: var(--text); }
+  .item { display: flex; gap: .8rem; padding: .8rem 0; border-bottom: 1px solid var(--border); color: var(--text); }
   .item:hover { text-decoration: none; }
   .item:hover h2 { color: var(--link, var(--accent)); }
+  .item .body { flex: 1; min-width: 0; }
   .item h2 { font-size: 1rem; margin: 0 0 .2rem; line-height: 1.35; font-weight: 500; }
   .item .o { font-size: .75rem; color: var(--text2); }
+  .thumb { width: 84px; height: 60px; flex: none; border-radius: var(--radius-lg); object-fit: cover; background: var(--bg2); }
+  .thumb[hidden] { display: none; }
+
+  .save {
+    border: 1px solid var(--border); background: var(--bg2); color: var(--text2);
+    font-family: inherit; font-size: .75rem; padding: .25rem .6rem; border-radius: var(--radius-pill);
+    cursor: pointer; flex: none; align-self: flex-start;
+  }
+  .save[aria-pressed="true"] { color: var(--bg); background: var(--text); border-color: var(--text); }
+  .story .save { float: right; margin-left: .5rem; }
+
+  .skeleton { margin-top: 1rem; padding: 1rem 1.25rem; border-radius: var(--radius-lg); background: var(--bg2); }
+  .skeleton .line { height: .9rem; border-radius: var(--radius-pill); background: var(--border); margin: .4rem 0; }
+  .skeleton .line.short { width: 40%; }
+  .skeleton .line:not(.short) { animation: pulse 1.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .skeleton .line { animation: none !important; } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
 
   footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: .85rem; color: var(--text2); }
   footer h2 { font-size: .95rem; color: var(--text); margin: 0 0 .4rem; font-weight: 600; }
@@ -108,18 +126,21 @@ if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add(
 <button id="retry" class="tab" hidden>Retry</button>
 <div class="controls">
   <input id="q" type="search" placeholder="Search headlines…" aria-label="Search headlines">
-  <div class="tabs" id="tabs">
-    <button class="tab active" data-f="latest">Latest</button>
-    <button class="tab" data-f="all">By story</button>
-    <button class="tab" data-f="l">Left-covered</button>
-    <button class="tab" data-f="c">Center-covered</button>
-    <button class="tab" data-f="r">Right-covered</button>
-    <button class="tab" data-f="blindspot">Blindspots</button>
+  <div class="tabs" id="tabs" role="tablist">
+    <button class="tab active" role="tab" aria-selected="true" data-f="latest">Latest</button>
+    <button class="tab" role="tab" aria-selected="false" data-f="all">By story</button>
+    <button class="tab" role="tab" aria-selected="false" data-f="l">Left-covered</button>
+    <button class="tab" role="tab" aria-selected="false" data-f="c">Center-covered</button>
+    <button class="tab" role="tab" aria-selected="false" data-f="r">Right-covered</button>
+    <button class="tab" role="tab" aria-selected="false" data-f="blindspot">Blindspots</button>
+    <button class="tab" role="tab" aria-selected="false" data-f="saved">Saved</button>
   </div>
   <select id="src" aria-label="Filter by source"><option value="">All sources</option></select>
 </div>
 
-<div id="stories" aria-live="polite"></div>
+<div id="stories" aria-live="polite">
+  <div class="skeleton" id="skeleton"><div class="line"></div><div class="line"></div><div class="line short"></div></div>
+</div>
 
 <footer>
   <h2>Also an API</h2>
