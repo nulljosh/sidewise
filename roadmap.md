@@ -21,17 +21,6 @@ Newsarc. Available: **Sidewise** (pick), Wirebrief, Newsgrain, Presswise, Biasle
 Newsband, Slantwise, Pressfold, Newsvane, Headwire.
 
 Before submitting, in order:
-- [ ] Create the ASC app record as **Sidewise** and register `com.nulljosh.newsline` for
-      iOS + macOS (Universal Purchase). Record creation is web-UI only (`asc-app-create-ui`)
-      and ASC records cannot be deleted without Apple Support, confirm the name first.
-- [ ] Accept the Paid Apps Agreement if still unaccepted (silently blocks all submits).
-- [ ] Screenshots (iPhone 6.5"/6.7", iPad 12.9", Mac), see `appstore-screenshots` skill.
-- [ ] Metadata + App Privacy (answer DATA_NOT_COLLECTED), privacy URL
-      `https://sidewise.heyitsmejosh.com/privacy`, marketing URL `https://sidewise.heyitsmejosh.com/app`.
-- [ ] Review notes must describe the app-only functionality (offline cache, saved stories,
-      bias filtering), this is a native client over an owned API, not a web wrapper, and the
-      5.6 letter requires spelling that out.
-- [ ] Add the App Store badge + link to `/app` once live.
 
 ## 2026-08-27, App Store: shipped as **Sidewise**, ASC `6806028670`
 
@@ -106,7 +95,6 @@ Dropped 5 dead feeds (all silently returning nothing): Reuters (public RSS disco
 - [ ] Post to Show HN and r/mcp. Drafts ready in LAUNCH.md, waiting on posting.
 - [ ] Re-check the 5 dropped feeds occasionally (Reuters, AP, MSNBC, CTV, CNN; Washington Post re-added 2026-09-06);
       re-add any that publish an official feed again. `npm run feeds` covers the live ones.
-- [ ] iOS companion app, deferred. When picked up: fetch `/api/stories`, list + detail or grouped-by-bias view. Reuse the xcodegen pattern from `journal/ios/` (smallest existing example): `project.yml` + `Sources/Shared/{Models,Services,Views}` + `Sources/iOS/`, plain `URLSession.shared.data(from:)` in an `ObservableObject` service, no auth needed since the API is public/unauthenticated.
 
 ## awesome-mcp-servers PR #11830 (2026-08-09)
 github-actions bot requires, before merge:
@@ -145,10 +133,6 @@ Worker, API and test layers landed (see commit). Not started, in priority order:
       target behind an App Group, and a Settings pane. `NewsService` needs splitting first, and
       a protocol seam so `Sidewise-Tests` can cover fetch/decode/error paths offline.
       No Swift toolchain in the web container, this needs a Mac or a macOS CI runner.
-- [ ] Doc drift: `/app.html` links labelled "Reader" point at `/`, which has been the marketing
-      page since 8af897b. Needs checking against the actual worker routing, not yet verified.
-      (Outlet-count drift in README/llms.txt/openapi/server.json fixed 2026-09-04, all now say 16,
-      matching FEEDS.length.)
 
 ## Ingested 2026-08-24
 
@@ -169,7 +153,6 @@ Done. 4 tools reusing the exact names and schemas of the existing `POST /mcp` se
 See `docs/API.md` for the full tool table, linked from the README.
 
 ## From Notes (imported 2026-08-27)
-- [ ] Sidewise 1.0 is still not shipping: both the iOS and macOS 1.0 version records sit at PREPARE_FOR_SUBMISSION, never submitted. Builds `202608271443` (iOS + macOS) are VALID and APP_STORE_ELIGIBLE, so the binaries are ready, what's missing is the submission itself plus whatever metadata `asc validate` still flags.
 
 ## Cold-pull latency (measured 2026-08-31)
 `/api/stories` cold = 2.75s, warm = 0.10s. The 120s Cache-API TTL means one caller per colo
