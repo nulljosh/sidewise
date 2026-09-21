@@ -25,6 +25,18 @@ The `/mcp` endpoint wraps the same logic in JSON-RPC for in-browser agents.
 | `check-feeds.mjs` | Feed health check: validates recency (not just item count), runs on every addition |
 | `test/` | Unit tests (95 checks): parse, stories, load, mcp, no network or Worker runtime |
 | `wrangler.toml` | Worker config: Cloudflare Pages static assets, cache API, worker route |
+| `ios/Sources/Shared/SidewiseApp.swift` | iOS/macOS app entry point with window group and share overlay (unified native app) |
+| `ios/Sources/Shared/Views/ContentView.swift` | Main native app view: feed list, filters (outlet, bias, search), bias view tab switcher |
+| `ios/Sources/Shared/Views/StoryRow.swift` | Story list item: headline, outlet, bias indicator, publish date |
+| `ios/Sources/Shared/Views/StoryDetailView.swift` | Full story detail page: outlet links, publication time, related stories by bias |
+| `ios/Sources/Shared/Views/BiasBar.swift` | Bias distribution visualization: stacked bars per outlet showing left/center/right spectrum |
+| `ios/Sources/Shared/Models/Story.swift` | Story data model: headline, outlet, link, publish date, bias tag, blindspot flag |
+| `ios/Sources/Shared/Services/NewsService.swift` | Native wrapper around `/api/stories`: fetches, parses, filters by outlet/bias/search, handles cache |
+| `ios/Tests/StoryTests.swift` | Unit tests for Story model and NewsService (filter logic, deduplication, bias tagging) |
+| `watchos/SidewiseWatchApp.swift` | watchOS app entry point with window group |
+| `watchos/ContentView.swift` | watchOS news reader: story list, limited detail view (compact display, 2-3 lines per story) |
+| `watchos/Story.swift` | Story model for watchOS (mirrors iOS model but optimized for small screen rendering) |
+| `Package.swift` + `tui/main.swift` | SwiftPM target for CLI reader: fetches `/api/stories` and renders a paginated feed in the terminal (static render) |
 
 ## Feed structure
 
