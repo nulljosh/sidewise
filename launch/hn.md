@@ -1,3 +1,3 @@
-Show HN: Sidewise – What is the other side reading?
+Show HN: Sidewise – bias-tagged news clustering without embeddings or an LLM
 
-Everyone reads one side and calls it the news. Sidewise pulls sixteen feeds from fourteen newsrooms, tags each story by outlet lean, and lays the same day out side by side. There is a reader, and there is an API so you can build on the tagged feed. The point is not balance. It is seeing what the other room is being told. Web at sidewise.heyitsmejosh.com, source on GitHub.
+Sidewise pulls sixteen feeds from fourteen newsrooms, clusters same-day stories together, tags each source left, center or right, and flags blindspots: stories only one side is covering. Same-story detection is done with title-keyword overlap instead of embeddings or an LLM call, so the whole pipeline runs on one Cloudflare Worker with no model cost and nothing in the hot path but string matching. There is a reader, a free API, and an MCP server. Web at sidewise.heyitsmejosh.com, source on GitHub.
