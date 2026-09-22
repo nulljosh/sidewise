@@ -152,10 +152,10 @@ per 2 min eats the full 16-feed fan-out. A cron warm only fixes the colo the cro
 (caches.default is per-datacenter), so the real fix is KV- or DO-backed pooling, not a trigger.
 Not worth it at current traffic, revisit if the reader gets real users.
 
-## 2026-09-02 macOS 1.0 REJECTED
-- ASC shows MAC_OS 1.0 REJECTED, submission 00f546b4 UNRESOLVED_ISSUES. iOS 1.0 still WAITING_FOR_REVIEW.
-- Rejection reason unread: `asc web` login has 503'd at signin init for a week; Chrome ASC session also logged out (authResult=FAILED). Needs Joshua to sign in to ASC manually and paste the Resolution Center message.
-- Likely 4.3(a) like the other seven apps; do not resubmit, reply in Resolution Center.
+## 2026-09-21 macOS live, iOS rejected
+- ASC shows MAC_OS 1.0 READY_FOR_SALE (live on App Store as of 2026-09-21). iOS 1.0 REJECTED (rejection email received 2026-09-21, reason unread).
+- Rejection reason to be read and addressed in Resolution Center; do not resubmit until reason is clear.
+- Washington Post feed times out on Worker (8s timeout) but works locally; other 16 feeds healthy. Issue: need to optimize feed pull latency or implement timeout handling.
 
 ## TUI pilot (2026-09-05)
 - `sidewise-tui` SwiftPM target (SwiftTUI). `swift build && ./.build/debug/sidewise-tui 5` lists top stories from /api/stories with source count. Needs a real TTY.
