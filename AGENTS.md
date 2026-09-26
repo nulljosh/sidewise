@@ -1,0 +1,1 @@
+/Users/joshua/Documents/Code/sidewise/CLAUDE.md

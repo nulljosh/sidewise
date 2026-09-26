@@ -13,50 +13,30 @@
 @import url("https://heyitsmejosh.com/tokens.css");
 
 :root {
-  --accent: #1f4e79;
-  --accent-soft: #e9eff5;
-  --bg: #ffffff;
-  --bg2: #f7f7f8;
-  --text: #1c1d22;
-  --text2: #5c5f6a;
-  --border: #e6e7ea;
-  --font-body: -apple-system, system-ui, "Inter", "Segoe UI", sans-serif;
+  --link: var(--clay-deep);
+  --accent-soft: color-mix(in srgb, var(--clay) 9%, var(--bg));
+  --font-body: -apple-system, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --radius-lg: 14px;
-  --radius-pill: 100px;
 
   /* Bias colours. Shared by the reader's coverage bars and the app page's example card,
      so the two never drift into disagreeing about which end of the bar is "left". */
-  --left: #1f4e79;
+  --left: var(--clay);
   --center: #8a8d97;
   --right: #c0392b;
 }
-
+:root[data-theme="dark"] {
+  --link: var(--clay);
+  --left: #d4957a;
+  --center: #7c7f89;
+  --right: #d5604f;
+}
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121316;
-    --bg2: #1a1b1f;
-    --text: #ececf0;
-    --text2: rgba(236, 236, 240, 0.62);
-    --border: rgba(236, 236, 240, 0.12);
-    --accent-soft: #141a20;
-    --link: #6787a4;
-    --left: #6787a4;
+    --link: var(--clay);
+    --left: #d4957a;
     --center: #7c7f89;
     --right: #d5604f;
   }
-}
-:root[data-theme="dark"] {
-  --bg: #121316;
-  --bg2: #1a1b1f;
-  --text: #ececf0;
-  --text2: rgba(236, 236, 240, 0.62);
-  --border: rgba(236, 236, 240, 0.12);
-  --accent-soft: #141a20;
-  --link: #6787a4;
-  --left: #6787a4;
-  --center: #7c7f89;
-  --right: #d5604f;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
