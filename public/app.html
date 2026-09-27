@@ -113,7 +113,7 @@ fetch('/api/sources').then(function (r) { return r.json(); }).then(function (d) 
   <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'));</script>
 <script src="/onboarding.js"></script>
 <script>
-    // First-run onboarding. Signed-out newcomers only, once per browser.
+    // First-run onboarding. Shows once, right after registration.
     Onboarding.start({
         key: "sidewise",
         finishLabel: "Get started",
