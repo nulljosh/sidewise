@@ -14,13 +14,16 @@ struct DietView: View {
             } else {
                 Section("Last 30 days · \(d.total) opened") {
                     ForEach(Side.allCases, id: \.self) { side in
-                        HStack {
-                            Text(side.label)
-                            Spacer()
-                            Text("\(Int((d.share(side) * 100).rounded()))%").monospacedDigit().foregroundStyle(.secondary)
+                        VStack(spacing: 8) {
+                            HStack {
+                                Text(side.label)
+                                Spacer()
+                                Text("\(Int((d.share(side) * 100).rounded()))%").monospacedDigit().foregroundStyle(.secondary)
+                            }
+                            ProgressView(value: d.share(side)).tint(side.color)
                         }
-                        ProgressView(value: d.share(side)).tint(side.color)
-                            .accessibilityHidden(true)
+                        .padding(.vertical, 4)
+                        .accessibilityElement(children: .combine)
                     }
                 }
                 if let blind = d.blindSide {
