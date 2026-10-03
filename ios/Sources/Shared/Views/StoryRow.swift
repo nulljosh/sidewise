@@ -2,6 +2,7 @@ import SwiftUI
 
 struct StoryRow: View {
     let story: Story
+    var read = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -20,6 +21,7 @@ struct StoryRow: View {
             }
         }
         .padding(.vertical, 4)
+        .opacity(read ? 0.55 : 1)
     }
 }
 

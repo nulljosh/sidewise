@@ -33,6 +33,7 @@ struct StoryDetailView: View {
             Section("Coverage") {
                 ForEach(story.sources) { source in
                     Button {
+                        service.markRead(source)
                         if let url = source.url { openURL(url) }
                     } label: {
                         SourceRow(source: source)
@@ -43,6 +44,7 @@ struct StoryDetailView: View {
         }
         .navigationTitle("Story")
         .toolbar {
+            ShareLink(item: shareText) { Label("Share", systemImage: "square.and.arrow.up") }
             Button {
                 service.toggleSave(story)
             } label: {
@@ -50,5 +52,10 @@ struct StoryDetailView: View {
                       systemImage: service.isSaved(story) ? "bookmark.fill" : "bookmark")
             }
         }
+    }
+
+    /// Headline plus how the coverage splits, so the person you send it to sees the spread too.
+    private var shareText: String {
+        "\(story.title)\nCovered by \(story.sources.count) outlets: \(story.count(.left)) left, \(story.count(.center)) center, \(story.count(.right)) right.\nsidewise.heyitsmejosh.com"
     }
 }

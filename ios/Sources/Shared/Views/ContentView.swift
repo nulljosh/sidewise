@@ -4,6 +4,7 @@ enum Pane: String, CaseIterable, Identifiable {
     case stories = "Stories"
     case latest = "Latest"
     case saved = "Saved"
+    case diet = "My Diet"
 
     var id: String { rawValue }
     var icon: String {
@@ -11,6 +12,7 @@ enum Pane: String, CaseIterable, Identifiable {
         case .stories: return "square.stack.3d.up"
         case .latest: return "clock"
         case .saved: return "bookmark"
+        case .diet: return "chart.bar"
         }
     }
 }
@@ -49,6 +51,14 @@ struct ContentView: View {
 
     @ViewBuilder
     private var feedList: some View {
+        if pane == .diet {
+            DietView().environmentObject(service)
+        } else {
+            storyList
+        }
+    }
+
+    private var storyList: some View {
         List {
             if let error = service.error {
                 Text(error)
@@ -66,14 +76,17 @@ struct ContentView: View {
                     .labelsHidden()
                 }
                 ForEach(filterStories(service.feed?.stories ?? [], filter: filter, query: query)) { story in
-                    NavigationLink(value: story) { StoryRow(story: story) }
+                    NavigationLink(value: story) { StoryRow(story: story, read: service.isRead(story)) }
                 }
             case .latest:
                 ForEach(latestSources) { source in
                     Link(destination: source.url ?? URL(string: "https://sidewise.heyitsmejosh.com")!) {
                         SourceRow(source: source)
                     }
+                    .simultaneousGesture(TapGesture().onEnded { service.markRead(source) })
                 }
+            case .diet:
+                EmptyView()
             case .saved:
                 if service.saved.isEmpty {
                     Text("Nothing saved yet. Open a story and tap the bookmark.")
@@ -81,7 +94,7 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
                 ForEach(filterStories(service.saved, filter: .all, query: query)) { story in
-                    NavigationLink(value: story) { StoryRow(story: story) }
+                    NavigationLink(value: story) { StoryRow(story: story, read: service.isRead(story)) }
                 }
             }
         }

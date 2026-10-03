@@ -57,3 +57,58 @@ final class StoryTests: XCTestCase {
         XCTAssertEqual(feed.latest.first?.outlet, "BBC")
     }
 }
+
+@MainActor
+final class DietTests: XCTestCase {
+    private func dirs() -> (URL, URL) {
+        let base = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let c = base.appendingPathComponent("caches"), s = base.appendingPathComponent("support")
+        try? FileManager.default.createDirectory(at: c, withIntermediateDirectories: true)
+        try? FileManager.default.createDirectory(at: s, withIntermediateDirectories: true)
+        return (c, s)
+    }
+    private func src(_ n: String, _ bias: Int) -> Source {
+        Source(title: n, link: "https://example.com/\(n)", outlet: n, bias: bias)
+    }
+
+    func testDietCountsOnlyTheLast30Days() {
+        let now = Date()
+        let reads = [
+            ReadEvent(link: "a", side: .left, date: now),
+            ReadEvent(link: "b", side: .left, date: now.addingTimeInterval(-86_400 * 40)),
+            ReadEvent(link: "c", side: .right, date: now),
+        ]
+        let d = diet(reads, now: now)
+        XCTAssertEqual(d.left, 1)
+        XCTAssertEqual(d.right, 1)
+        XCTAssertEqual(d.total, 2)
+    }
+
+    func testBlindSideNeedsEnoughReadsAndALopsidedMix() {
+        XCTAssertNil(Diet(left: 3, center: 0, right: 0).blindSide, "too few to say")
+        XCTAssertEqual(Diet(left: 9, center: 5, right: 0).blindSide, .right)
+        XCTAssertNil(Diet(left: 4, center: 4, right: 4).blindSide, "balanced")
+    }
+
+    func testReadsPersistAndMarkAStoryRead() {
+        let (c, s) = dirs()
+        let service = NewsService(caches: c, support: s)
+        let story = Story(title: "T", sources: [src("NPR", -1), src("Fox", 2)], blindspot: false)
+        XCTAssertFalse(service.isRead(story))
+        service.markRead(story.sources[0])
+        XCTAssertTrue(service.isRead(story))
+        XCTAssertEqual(NewsService(caches: c, support: s).reads.count, 1, "survives relaunch")
+        service.clearReads()
+        XCTAssertTrue(NewsService(caches: c, support: s).reads.isEmpty)
+    }
+
+    func testSavedMovesOutOfCaches() throws {
+        let (c, s) = dirs()
+        let story = Story(title: "Old save", sources: [src("BBC", 0)], blindspot: false)
+        try JSONEncoder().encode([story]).write(to: c.appendingPathComponent("sidewise-saved.json"))
+        let service = NewsService(caches: c, support: s)
+        XCTAssertEqual(service.saved.map(\.title), ["Old save"])
+        XCTAssertFalse(FileManager.default.fileExists(atPath: c.appendingPathComponent("sidewise-saved.json").path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: s.appendingPathComponent("sidewise-saved.json").path))
+    }
+}
