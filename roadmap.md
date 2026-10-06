@@ -163,3 +163,6 @@ Not worth it at current traffic, revisit if the reader gets real users.
 ## 2026-09-10 reader improvements
 
 Shareable filters and Back navigation, safe headline rendering, a retry button, feed outage notices, developing tags, and publisher-based counts are implemented. The service worker refreshes news before using an offline fallback. All 108 tests pass. Browser checks cover filter restoration, unsafe links, and outage notices. Saved stories, richer story previews, and comparison remain open.
+
+## Ingested 2026-10-05
+- [ ] QA
