@@ -30,15 +30,20 @@ struct StoryDetailView: View {
                 .padding(.vertical, 4)
             }
 
-            Section("Coverage") {
-                ForEach(story.sources) { source in
-                    Button {
-                        service.markRead(source)
-                        if let url = source.url { openURL(url) }
-                    } label: {
-                        SourceRow(source: source)
-                    }
-                    .buttonStyle(.plain)
+            let comparison = Comparison(story)
+            Section(comparison.isComparable ? "Side by side, left to right" : "Coverage") {
+                if !comparison.isComparable, let only = comparison.entries.first {
+                    Text("Only \(only.outletKey) has this so far, so there is nothing to compare yet. It will fill in as other outlets pick it up.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+                ForEach(comparison.entries) { source in
+                    OutletCard(source: source)
+                }
+                if comparison.isComparable, !comparison.missingSides.isEmpty {
+                    Text("No \(comparison.missingSides.map { $0.label.lowercased() }.joined(separator: " or ")) outlet has covered this yet.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
         }

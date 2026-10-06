@@ -10,16 +10,21 @@ final class NewsService: ObservableObject {
     /// Every outlet link the user opened, newest first. Feeds the reading diet. Stays on the device.
     @Published private(set) var reads: [ReadEvent] = []
 
+    /// Followed and muted outlets. Stays on the device.
+    @Published private(set) var prefs = OutletPrefs()
+
     private let endpoint = URL(string: "https://sidewise.heyitsmejosh.com/api/stories")!
     private let cacheURL: URL
     private let savedURL: URL
     private let readsURL: URL
+    private let prefsURL: URL
 
     init(caches: URL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0],
          support: URL = NewsService.defaultSupport) {
         cacheURL = caches.appendingPathComponent("sidewise-feed.json")
         savedURL = support.appendingPathComponent("sidewise-saved.json")
         readsURL = support.appendingPathComponent("sidewise-reads.json")
+        prefsURL = support.appendingPathComponent("sidewise-outlets.json")
         // Saves used to live in Caches, which the system may empty. Move them somewhere safe.
         let old = caches.appendingPathComponent("sidewise-saved.json")
         if !FileManager.default.fileExists(atPath: savedURL.path), FileManager.default.fileExists(atPath: old.path) {
@@ -28,6 +33,7 @@ final class NewsService: ObservableObject {
         feed = try? JSONDecoder().decode(Feed.self, from: Data(contentsOf: cacheURL))
         saved = (try? JSONDecoder().decode([Story].self, from: Data(contentsOf: savedURL))) ?? []
         reads = (try? JSONDecoder().decode([ReadEvent].self, from: Data(contentsOf: readsURL))) ?? []
+        prefs = (try? JSONDecoder().decode(OutletPrefs.self, from: Data(contentsOf: prefsURL))) ?? OutletPrefs()
     }
 
     nonisolated static var defaultSupport: URL {
@@ -59,7 +65,7 @@ final class NewsService: ObservableObject {
     // MARK: - Reading diet
 
     func markRead(_ source: Source, now: Date = .now) {
-        reads.insert(ReadEvent(link: source.link, side: source.side, date: now), at: 0)
+        reads.insert(ReadEvent(link: source.link, side: source.side, date: now, outlet: source.outletKey, bias: source.bias), at: 0)
         if reads.count > 2000 { reads.removeLast(reads.count - 2000) }
         try? JSONEncoder().encode(reads).write(to: readsURL, options: .atomic)
     }
@@ -74,6 +80,19 @@ final class NewsService: ObservableObject {
         let links = Set(reads.map(\.link))
         return story.sources.contains { links.contains($0.link) }
     }
+
+    // MARK: - Outlets
+
+    func toggleFollow(_ key: String) { prefs.toggleFollow(key); savePrefs() }
+    func toggleMute(_ key: String) { prefs.toggleMute(key); savePrefs() }
+
+    private func savePrefs() {
+        try? JSONEncoder().encode(prefs).write(to: prefsURL, options: .atomic)
+    }
+
+    /// Stories with muted outlets taken out.
+    var stories: [Story] { hideMuted(feed?.stories ?? [], prefs: prefs) }
+    var latest: [Source] { hideMuted(feed?.latest ?? [], prefs: prefs) }
 
     // MARK: - Saved
 
@@ -124,6 +143,9 @@ struct ReadEvent: Codable, Equatable {
     let link: String
     let side: Side
     let date: Date
+    /// Older saved reads have neither of these.
+    var outlet: String? = nil
+    var bias: Int? = nil
 }
 
 struct Diet: Equatable {
@@ -144,11 +166,10 @@ struct Diet: Equatable {
     }
 }
 
-/// Opens in the last `days` days, counted by the side of the outlet.
-func diet(_ reads: [ReadEvent], days: Int = 30, now: Date = .now) -> Diet {
-    let cutoff = now.addingTimeInterval(-Double(days) * 86_400)
+/// Opens in the last `days` days (a week by default), counted by the side of the outlet.
+func diet(_ reads: [ReadEvent], days: Int = 7, now: Date = .now) -> Diet {
     var d = Diet()
-    for r in reads where r.date >= cutoff {
+    for r in readsWithin(days, of: reads, now: now) {
         switch r.side {
         case .left: d.left += 1
         case .center: d.center += 1
@@ -156,4 +177,24 @@ func diet(_ reads: [ReadEvent], days: Int = 30, now: Date = .now) -> Diet {
         }
     }
     return d
+}
+
+func readsWithin(_ days: Int, of reads: [ReadEvent], now: Date = .now) -> [ReadEvent] {
+    let cutoff = now.addingTimeInterval(-Double(days) * 86_400)
+    return reads.filter { $0.date >= cutoff && $0.date <= now.addingTimeInterval(60) }
+}
+
+/// Average lean of what was opened, -2 (left) to +2 (right). Nil when no read carries a rating.
+func averageLean(_ reads: [ReadEvent]) -> Double? {
+    let rated = reads.compactMap(\.bias)
+    guard !rated.isEmpty else { return nil }
+    return Double(rated.reduce(0, +)) / Double(rated.count)
+}
+
+/// Most-opened outlets, ties broken by name.
+func topOutlets(_ reads: [ReadEvent], limit: Int = 3) -> [(outlet: String, count: Int)] {
+    var counts: [String: Int] = [:]
+    for r in reads { if let o = r.outlet { counts[o, default: 0] += 1 } }
+    return counts.sorted { $0.value != $1.value ? $0.value > $1.value : $0.key < $1.key }
+        .prefix(limit).map { (outlet: $0.key, count: $0.value) }
 }

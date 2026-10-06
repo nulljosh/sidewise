@@ -6,8 +6,15 @@ struct Source: Codable, Hashable, Identifiable {
     let link: String
     let outlet: String
     let bias: Int
+    /// The newsroom behind the feed, when the API says so (NY Post and NY Post Opinion are one voice).
+    var publisher: String? = nil
+    /// Publish time in milliseconds since 1970, when the feed gave one.
+    var ts: Double? = nil
 
     var id: String { link }
+    /// What identifies the outlet for following, muting and comparing.
+    var outletKey: String { publisher ?? outlet }
+    var date: Date? { ts.flatMap { $0 > 0 ? Date(timeIntervalSince1970: $0 / 1000) : nil } }
     var side: Side { bias < 0 ? .left : bias > 0 ? .right : .center }
     var url: URL? { URL(string: link) }
 }
