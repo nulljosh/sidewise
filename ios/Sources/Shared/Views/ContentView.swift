@@ -186,11 +186,17 @@ struct ContentView: View {
             for outlet in ["NPR", "BBC", "BBC", "Fox News", "The Guardian", "NBC News", "NPR", "National Post"] {
                 if let s = all.first(where: { $0.outletKey == outlet }) { service.markRead(s) }
             }
-            service.toggleFollow("BBC"); service.toggleFollow("NPR"); service.toggleMute("Daily Wire")
         }
+        for key in (d.string(forKey: "follow") ?? "").split(separator: ",").map(String.init) where !service.prefs.isFollowed(key) {
+            service.toggleFollow(key)
+        }
+        for key in (d.string(forKey: "mute") ?? "").split(separator: ",").map(String.init) where !service.prefs.isMuted(key) {
+            service.toggleMute(key)
+        }
+        if let q = d.string(forKey: "query") { query = q }
         if let name = d.string(forKey: "pane"), let p = Pane(rawValue: name) { selection = p }
         guard let push = d.string(forKey: "push") else { return }
-        if push == "compare", let story = comparableStories(service.stories).first { path.append(story) }
+        if push.hasPrefix("compare"), let story = comparableStories(service.stories).first(where: { push == "compare" || $0.title.contains(push.dropFirst(8)) }) { path.append(story) }
         if push == "single", let story = service.stories.first(where: { !Comparison($0).isComparable }) { path.append(story) }
         if push.hasPrefix("outlet:") { path.append(OutletRoute(key: String(push.dropFirst(7)))) }
     }

@@ -29,7 +29,8 @@ struct TopStoryProvider: TimelineProvider {
     static func topStory() async -> Story? {
         guard let (data, _) = try? await URLSession.shared.data(from: URL(string: "https://sidewise.heyitsmejosh.com/api/stories?view=stories&limit=20")!),
               let feed = try? JSONDecoder().decode(Feed.self, from: data) else { return nil }
-        return comparableStories(feed.stories).first ?? feed.stories.first
+        let stories = feed.stories.map(\.coherent)
+        return comparableStories(stories).first ?? stories.first
     }
 }
 

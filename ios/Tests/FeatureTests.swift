@@ -191,3 +191,56 @@ final class DomainTests: XCTestCase {
         XCTAssertNil(both.outlet(for: URL(string: "https://shared.com/3")!))
     }
 }
+
+final class ClusterGuardTests: XCTestCase {
+    private func src(_ outlet: String, _ bias: Int, _ title: String) -> Source {
+        Source(title: title, link: "https://example.com/\(outlet)", outlet: outlet, bias: bias)
+    }
+
+    /// The real bad cluster from the live feed: an unrelated Hacker News post inside a politics story.
+    private lazy var bad = Story(
+        title: "Dennis Hastert, longest-serving Republican House Speaker, dies at 84",
+        sources: [
+            src("NPR", -1, "Dennis Hastert, longtime Republican House speaker who went to prison, dies at age 84"),
+            src("Hacker News", 0, "The lamps in my house"),
+            src("Fox News", 2, "Dennis Hastert, longest-serving Republican House Speaker, dies at 84"),
+        ],
+        blindspot: false
+    )
+
+    func testUnrelatedHeadlineIsDropped() {
+        let c = Comparison(bad)
+        XCTAssertEqual(c.entries.map(\.outlet), ["NPR", "Fox News"])
+        XCTAssertTrue(c.isComparable)
+        XCTAssertEqual(bad.coherent.outletCount, 2)
+    }
+
+    func testGoodClusterIsUntouched() {
+        let good = Story(title: "France braces for national day of school protests after injuries and mass arrests", sources: [
+            src("BBC", 0, "France braces for national day of school protests after injuries and mass arrests"),
+            src("The Guardian", -1, "France braces for national day of school protests as boy loses hand"),
+        ], blindspot: false)
+        XCTAssertEqual(good.coherent, good)
+        XCTAssertEqual(Comparison(good).entries.count, 2)
+    }
+
+    func testOnlyOffTopicLeftMeansNothingToCompare() {
+        let s = Story(title: "Brazil election first round results", sources: [
+            src("BBC", 0, "Brazil election first round results"),
+            src("Hacker News", 0, "Show HN: a tiny database"),
+        ], blindspot: false)
+        let c = Comparison(s)
+        XCTAssertEqual(c.entries.map(\.outlet), ["BBC"])
+        XCTAssertFalse(c.isComparable)
+    }
+
+    func testMeaningfulWords() {
+        XCTAssertEqual(meaningfulWords("The lamps in my house"), ["lamps", "house"])
+        XCTAssertEqual(meaningfulWords("Trump's ‘red dye’ diesel, with fuel"), ["trumps", "diesel", "fuel"])
+    }
+
+    func testSingleWordLeadNeedsOneSharedWord() {
+        let s = Story(title: "Brazil", sources: [src("A", 0, "Brazil"), src("B", 2, "Brazil votes today")], blindspot: false)
+        XCTAssertEqual(s.coherent.sources.count, 2)
+    }
+}

@@ -91,7 +91,7 @@ final class NewsService: ObservableObject {
     }
 
     /// Stories with muted outlets taken out.
-    var stories: [Story] { hideMuted(feed?.stories ?? [], prefs: prefs) }
+    var stories: [Story] { hideMuted((feed?.stories ?? []).map(\.coherent), prefs: prefs) }
     var latest: [Source] { hideMuted(feed?.latest ?? [], prefs: prefs) }
 
     // MARK: - Saved

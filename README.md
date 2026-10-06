@@ -32,6 +32,8 @@ What the iPhone and iPad app does beyond a list of stories:
 - **Compare.** Open a story and each outlet's headline sits side by side, left to right, with
   its rating and a link out. The Compare tab lists only stories two or more outlets cover. A
   one-outlet story says so instead of faking a comparison.
+  The feed's clusters sometimes pull in an unrelated item, so a headline stays in a comparison only if
+  it shares at least two meaningful words with the story's title.
 - **Outlets and Following.** Every outlet with its rating and recent headlines. Follow or mute
   any of them; muted outlets disappear, followed ones get their own tab.
 - **My Diet.** This week's left, center and right mix of what you actually opened, your

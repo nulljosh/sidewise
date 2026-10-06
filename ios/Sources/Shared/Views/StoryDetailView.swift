@@ -2,6 +2,9 @@ import SwiftUI
 
 struct StoryDetailView: View {
     let story: Story
+
+    init(story: Story) { self.story = story.coherent }
+
     @EnvironmentObject var service: NewsService
     @Environment(\.openURL) private var openURL
 
