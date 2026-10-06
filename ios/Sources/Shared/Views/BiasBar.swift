@@ -16,8 +16,8 @@ struct BiasBar: View {
     let left: Int, center: Int, right: Int
     var height: CGFloat = 5
 
-    init(story: Story) {
-        self.init(left: story.count(.left), center: story.count(.center), right: story.count(.right))
+    init(story: Story, height: CGFloat = 5) {
+        self.init(left: story.count(.left), center: story.count(.center), right: story.count(.right), height: height)
     }
 
     init(left: Int, center: Int, right: Int, height: CGFloat = 5) {

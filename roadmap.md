@@ -1,5 +1,16 @@
 # Sidewise Roadmap
 
+## 2026-10-05, iOS rebuilt after the 4.3 and 4.2.6 rejection
+
+Apple read the iOS app as a thin feed list that overlaps Inkpress. The same 1.0 now has its own
+features: Compare (outlets side by side, left to right, grouped by the API's own story
+clusters, honest note for one-outlet stories), Outlets and Following (follow or mute, per
+outlet screen), a weekly My Diet on the bias bar, a Share extension that rates a shared link's
+outlet by domain, and a small and medium widget. Same version string, new build number,
+uploaded and validated; not submitted. The macOS 1.0 record is untouched and still compiles
+from the same shared code. Export now uses automatic signing because the app carries two
+extensions.
+
 ## 2026-08-11, v1.0.0 apps + landing page
 
 - `ios/`: SwiftUI app, one shared source tree for iPhone/iPad (`Sidewise-iOS`) and Mac

@@ -25,7 +25,20 @@ Five ways in: a [web reader](https://sidewise.heyitsmejosh.com), native [iPhone,
 ## Apps
 
 SwiftUI, one codebase for iOS and macOS, in `ios/`. It reads the same public API. No account,
-no tracking. Saved stories and the feed cache stay on the device.
+no tracking. Saved stories, follows, reading history and the feed cache stay on the device.
+
+What the iPhone and iPad app does beyond a list of stories:
+
+- **Compare.** Open a story and each outlet's headline sits side by side, left to right, with
+  its rating and a link out. The Compare tab lists only stories two or more outlets cover. A
+  one-outlet story says so instead of faking a comparison.
+- **Outlets and Following.** Every outlet with its rating and recent headlines. Follow or mute
+  any of them; muted outlets disappear, followed ones get their own tab.
+- **My Diet.** This week's left, center and right mix of what you actually opened, your
+  average lean and your most opened outlets.
+- **Share extension.** Share a link from Safari and it tells you how Sidewise rates that
+  outlet, matched by domain, or says the outlet is not rated.
+- **Widget.** Small and medium Home Screen widget with the top story and its bias bar.
 
 ```
 cd ios && xcodegen generate

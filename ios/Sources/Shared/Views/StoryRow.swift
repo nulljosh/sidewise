@@ -12,7 +12,7 @@ struct StoryRow: View {
                 .multilineTextAlignment(.leading)
             BiasBar(story: story)
             HStack(spacing: 8) {
-                Text("\(story.sources.count) outlet\(story.sources.count == 1 ? "" : "s")")
+                Text("\(story.outletCount) outlet\(story.outletCount == 1 ? "" : "s")")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 if story.blindspot, let side = story.lonelySide {

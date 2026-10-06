@@ -11,7 +11,7 @@ settings:
   base:
     SWIFT_VERSION: "5.9"
     MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "202610031815"
+    CURRENT_PROJECT_VERSION: "202610052009"
     DEVELOPMENT_TEAM: QMM486NPYC
 
 schemes:
@@ -19,6 +19,8 @@ schemes:
     build:
       targets:
         Sidewise-iOS: all
+        Sidewise-Share: all
+        Sidewise-Widget: all
         Sidewise-Tests: [test]
     test:
       targets:
@@ -35,6 +37,9 @@ targets:
     sources:
       - path: Sources/Shared
       - path: Sources/iOS
+    dependencies:
+      - target: Sidewise-Share
+      - target: Sidewise-Widget
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.newsline
@@ -42,6 +47,38 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  Sidewise-Share:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Sources/Share
+      - path: Sources/Shared/Models
+      - path: Sources/Shared/Views/BiasBar.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.newsline.share
+        INFOPLIST_FILE: Sources/Share/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+
+  Sidewise-Widget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Sources/Widget
+      - path: Sources/Shared/Models
+      - path: Sources/Shared/Views/BiasBar.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.newsline.widget
+        INFOPLIST_FILE: Sources/Widget/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
 
   Sidewise-macOS:
     type: application

@@ -28,6 +28,7 @@ struct ContentView: View {
     @State private var selection: Pane? = .stories
     @State private var filter: StoryFilter = .all
     @State private var query = ""
+    @State private var path = NavigationPath()
 
     var body: some View {
         NavigationSplitView {
@@ -41,7 +42,7 @@ struct ContentView: View {
             .frame(minWidth: 170)
             #endif
         } detail: {
-            NavigationStack {
+            NavigationStack(path: $path) {
                 feedList
                     .navigationTitle(pane.rawValue)
                     .navigationDestination(for: Story.self) { story in
@@ -53,7 +54,12 @@ struct ContentView: View {
             }
         }
         .searchable(text: $query, prompt: "Search headlines")
-        .task { if service.feed == nil { await service.refresh() } }
+        .task {
+            if service.feed == nil { await service.refresh() }
+            #if DEBUG
+            applyLaunchArguments()
+            #endif
+        }
     }
 
     private var pane: Pane { selection ?? .stories }
@@ -170,4 +176,23 @@ struct ContentView: View {
         guard !q.isEmpty else { return all }
         return all.filter { $0.title.lowercased().contains(q) || $0.outlet.lowercased().contains(q) }
     }
+
+    #if DEBUG
+    /// Debug builds only: `-pane Compare`, `-push compare`, `-push outlet:NPR` and `-seed 1` jump
+    /// straight to a screen so it can be photographed. Release builds do not contain this.
+    private func applyLaunchArguments() {
+        let d = UserDefaults.standard
+        if d.string(forKey: "seed") != nil, service.reads.isEmpty, let all = service.feed.map(allSources) {
+            for outlet in ["NPR", "BBC", "BBC", "Fox News", "The Guardian", "NBC News", "NPR", "National Post"] {
+                if let s = all.first(where: { $0.outletKey == outlet }) { service.markRead(s) }
+            }
+            service.toggleFollow("BBC"); service.toggleFollow("NPR"); service.toggleMute("Daily Wire")
+        }
+        if let name = d.string(forKey: "pane"), let p = Pane(rawValue: name) { selection = p }
+        guard let push = d.string(forKey: "push") else { return }
+        if push == "compare", let story = comparableStories(service.stories).first { path.append(story) }
+        if push == "single", let story = service.stories.first(where: { !Comparison($0).isComparable }) { path.append(story) }
+        if push.hasPrefix("outlet:") { path.append(OutletRoute(key: String(push.dropFirst(7)))) }
+    }
+    #endif
 }

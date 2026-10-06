@@ -31,7 +31,10 @@ struct Story: Codable, Hashable, Identifiable {
 
     var id: String { title }
 
-    func count(_ side: Side) -> Int { sources.filter { $0.side == side }.count }
+    /// Distinct outlets on one side. The feed can list the same outlet twice, which must not count twice.
+    func count(_ side: Side) -> Int { Set(sources.filter { $0.side == side }.map(\.outletKey)).count }
+
+    var outletCount: Int { Set(sources.map(\.outletKey)).count }
 
     /// The one political side covering this, if only one does.
     var lonelySide: Side? {
@@ -40,7 +43,7 @@ struct Story: Codable, Hashable, Identifiable {
     }
 
     var outlets: String {
-        sources.map(\.outlet).joined(separator: ", ")
+        orderLeftToRight(sources).map(\.outletKey).joined(separator: ", ")
     }
 }
 

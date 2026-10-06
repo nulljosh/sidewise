@@ -145,3 +145,49 @@ final class WeeklyDietTests: XCTestCase {
         XCTAssertNil(reads[0].outlet)
     }
 }
+
+final class OutletCountTests: XCTestCase {
+    func testDuplicateOutletCountsOnce() {
+        let a = Source(title: "a", link: "https://x/1", outlet: "NY Post", bias: 2)
+        let b = Source(title: "b", link: "https://x/2", outlet: "New York Post Opinion", bias: 2, publisher: "NY Post")
+        let s = Story(title: "T", sources: [a, a, b], blindspot: false)
+        XCTAssertEqual(s.count(.right), 1)
+        XCTAssertEqual(s.outletCount, 1)
+    }
+}
+
+final class DomainTests: XCTestCase {
+    private func src(_ outlet: String, _ bias: Int, _ link: String) -> Source {
+        Source(title: "t", link: link, outlet: outlet, bias: bias)
+    }
+
+    func testRegistrableDomain() {
+        XCTAssertEqual(registrableDomain("www.nypost.com"), "nypost.com")
+        XCTAssertEqual(registrableDomain("news.bbc.co.uk"), "bbc.co.uk")
+        XCTAssertEqual(registrableDomain("NYPOST.com"), "nypost.com")
+        XCTAssertEqual(registrableDomain("localhost"), "localhost")
+    }
+
+    func testMatchesByLearnedDomain() {
+        let idx = DomainIndex([src("NY Post", 2, "https://nypost.com/2026/a"), src("NPR", -1, "https://www.npr.org/b")])
+        XCTAssertEqual(idx.outlet(for: URL(string: "https://www.nypost.com/other")!)?.outlet, "NY Post")
+        XCTAssertEqual(idx.outlet(for: URL(string: "https://apps.npr.org/x")!)?.bias, -1)
+        XCTAssertNil(idx.outlet(for: URL(string: "https://example.org/x")!), "unrated outlet")
+    }
+
+    func testSameNameOnAnotherDomainMatches() {
+        let idx = DomainIndex([src("BBC", 0, "https://www.bbc.co.uk/news/a"), src("Fox News", 2, "https://www.foxnews.com/a")])
+        XCTAssertEqual(idx.outlet(for: URL(string: "https://www.bbc.com/news/x")!)?.outlet, "BBC")
+        XCTAssertNil(idx.outlet(for: URL(string: "https://www.cnn.com/x")!))
+    }
+
+    func testAggregatorsAndSharedDomainsAreSkipped() {
+        var hn = (0..<8).map { src("Hacker News", 0, "https://site\($0).com/p") }
+        hn.append(src("NPR", -1, "https://npr.org/a"))
+        let idx = DomainIndex(hn, aggregatorThreshold: 6)
+        XCTAssertNil(idx.outlet(for: URL(string: "https://site1.com/p")!))
+        XCTAssertNotNil(idx.outlet(for: URL(string: "https://npr.org/z")!))
+        let both = DomainIndex([src("A", -1, "https://shared.com/1"), src("B", 2, "https://shared.com/2")])
+        XCTAssertNil(both.outlet(for: URL(string: "https://shared.com/3")!))
+    }
+}
