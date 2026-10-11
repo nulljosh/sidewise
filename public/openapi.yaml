@@ -20,7 +20,7 @@ info:
     email: trommatic@icloud.com
 
 servers:
-  - url: https://sidewise.heyitsmejosh.com
+  - url: https://sidewise.jaybulb.com
 
 paths:
   /api/stories:

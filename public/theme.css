@@ -1,7 +1,7 @@
 /* theme.css — one palette and one set of primitives for every Sidewise page.
 
    Before this file the landing page carried its own palette while reader.html, app.html and
-   privacy.html took whatever https://heyitsmejosh.com/tokens.css happened to define, so the
+   privacy.html took whatever https://jaybulb.com/tokens.css happened to define, so the
    marketing page and the app it advertises did not look like the same product — and the app
    pages rendered near-unstyled whenever that cross-origin import failed to load.
 
@@ -10,7 +10,7 @@
    failed import degrades the type stack and nothing else. Page-specific rules live in the
    page; anything two pages share belongs here. */
 
-@import url("https://heyitsmejosh.com/tokens.css");
+@import url("https://jaybulb.com/tokens.css");
 
 :root {
   --link: var(--clay-deep);

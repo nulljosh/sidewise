@@ -39,7 +39,7 @@ export function parseQuery(url) {
 const SECURITY_TXT = `Contact: mailto:trommatic@icloud.com
 Expires: 2027-01-01T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://sidewise.heyitsmejosh.com/.well-known/security.txt
+Canonical: https://sidewise.jaybulb.com/.well-known/security.txt
 `;
 
 /// Health summary shipped alongside every /api/stories response. Clients that used to have
@@ -123,8 +123,8 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     // Old domain, kept alive only to forward links published before the sidewise rename.
-    if (url.hostname === 'news.heyitsmejosh.com') {
-      url.hostname = 'sidewise.heyitsmejosh.com';
+    if (url.hostname === 'news.jaybulb.com') {
+      url.hostname = 'sidewise.jaybulb.com';
       return Response.redirect(url.toString(), 301);
     }
     try {
