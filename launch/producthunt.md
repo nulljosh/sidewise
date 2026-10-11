@@ -11,7 +11,7 @@ Topics: News, Politics, APIs
 Pricing: Free.
 
 Links
-Web: https://sidewise.heyitsmejosh.com
+Web: https://sidewise.jaybulb.com
 App Store: https://apps.apple.com/app/id6806028670
 GitHub: https://github.com/nulljosh/sidewise
 

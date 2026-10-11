@@ -8,4 +8,4 @@ Same-story detection runs on title-keyword overlap, no embeddings or LLM call, s
 
 There's a web reader, native iOS/Mac apps, a free JSON API, and an MCP server. No account, no key, no limit. Feedback on the bias labels and the blindspot detection welcome.
 
-https://sidewise.heyitsmejosh.com
+https://sidewise.jaybulb.com

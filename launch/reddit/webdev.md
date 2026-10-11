@@ -8,4 +8,4 @@ It's one Cloudflare Worker, no model cost, no external call in the hot path. Fre
 
 Would like feedback on the API shape if anyone wants to build on it.
 
-https://sidewise.heyitsmejosh.com
+https://sidewise.jaybulb.com

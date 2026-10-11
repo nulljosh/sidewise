@@ -4,4 +4,4 @@ Title: A news reader that shows you the same story from every side of the spectr
 
 Body: Sidewise pulls 16 feeds from 14 newsrooms, clusters the same story across outlets, tags each source left, center or right, and flags stories only one side is covering. No account, no login, no limit.
 
-https://sidewise.heyitsmejosh.com
+https://sidewise.jaybulb.com
