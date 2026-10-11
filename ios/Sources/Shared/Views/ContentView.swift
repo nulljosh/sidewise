@@ -113,7 +113,7 @@ struct ContentView: View {
                 EmptyView()
             case .latest:
                 ForEach(latestSources) { source in
-                    Link(destination: source.url ?? URL(string: "https://sidewise.heyitsmejosh.com")!) {
+                    Link(destination: source.url ?? URL(string: "https://sidewise.jaybulb.com")!) {
                         SourceRow(source: source)
                     }
                     .simultaneousGesture(TapGesture().onEnded { service.markRead(source) })
@@ -161,7 +161,7 @@ struct ContentView: View {
             }
             Section("Latest from \(service.prefs.followed.count) followed") {
                 ForEach(recent) { source in
-                    Link(destination: source.url ?? URL(string: "https://sidewise.heyitsmejosh.com")!) {
+                    Link(destination: source.url ?? URL(string: "https://sidewise.jaybulb.com")!) {
                         SourceRow(source: source)
                     }
                     .simultaneousGesture(TapGesture().onEnded { service.markRead(source) })

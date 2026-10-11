@@ -23,7 +23,7 @@ final class StoriesFetcher: ObservableObject {
     func load() async {
         loading = true
         failed = false
-        guard let url = URL(string: "https://sidewise.heyitsmejosh.com/api/stories?limit=10") else { return }
+        guard let url = URL(string: "https://sidewise.jaybulb.com/api/stories?limit=10") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let decoded = try JSONDecoder().decode(StoriesResponse.self, from: data)

@@ -27,7 +27,7 @@ final class ShareModel: ObservableObject {
     func load(from items: [NSExtensionItem]) async {
         guard let url = await Self.link(in: items) else { state = .noLink; return }
         do {
-            let (data, _) = try await URLSession.shared.data(from: URL(string: "https://sidewise.heyitsmejosh.com/api/stories")!)
+            let (data, _) = try await URLSession.shared.data(from: URL(string: "https://sidewise.jaybulb.com/api/stories")!)
             let feed = try JSONDecoder().decode(Feed.self, from: data)
             let index = DomainIndex(allSources(feed))
             if let outlet = index.outlet(for: url) { state = .rated(outlet, url) } else { state = .unrated(url) }

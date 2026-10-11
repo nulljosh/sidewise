@@ -64,6 +64,6 @@ struct StoryDetailView: View {
 
     /// Headline plus how the coverage splits, so the person you send it to sees the spread too.
     private var shareText: String {
-        "\(story.title)\nCovered by \(story.outletCount) outlets: \(story.count(.left)) left, \(story.count(.center)) center, \(story.count(.right)) right.\nsidewise.heyitsmejosh.com"
+        "\(story.title)\nCovered by \(story.outletCount) outlets: \(story.count(.left)) left, \(story.count(.center)) center, \(story.count(.right)) right.\nsidewise.jaybulb.com"
     }
 }

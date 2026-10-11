@@ -13,7 +13,7 @@ final class NewsService: ObservableObject {
     /// Followed and muted outlets. Stays on the device.
     @Published private(set) var prefs = OutletPrefs()
 
-    private let endpoint = URL(string: "https://sidewise.heyitsmejosh.com/api/stories")!
+    private let endpoint = URL(string: "https://sidewise.jaybulb.com/api/stories")!
     private let cacheURL: URL
     private let savedURL: URL
     private let readsURL: URL

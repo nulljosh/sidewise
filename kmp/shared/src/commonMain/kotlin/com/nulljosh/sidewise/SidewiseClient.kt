@@ -25,7 +25,7 @@ data class StoriesResponse(val updated: Long, val latest: List<Story>)
 
 // Reads the same public /api/stories endpoint the web reader does. No RSS
 // parsing here -- the Worker already fetches and clusters every feed.
-class SidewiseClient(private val baseUrl: String = "https://sidewise.heyitsmejosh.com") {
+class SidewiseClient(private val baseUrl: String = "https://sidewise.jaybulb.com") {
     private val http = HttpClient {
         install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
     }

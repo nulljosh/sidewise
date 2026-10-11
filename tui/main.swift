@@ -13,7 +13,7 @@ let args = CommandLine.arguments.dropFirst()
 let limit = args.first.flatMap { Int($0) } ?? 5
 
 func fetchStories() async -> [Story] {
-    guard let url = URL(string: "https://sidewise.heyitsmejosh.com/api/stories?limit=\(limit)") else { return [] }
+    guard let url = URL(string: "https://sidewise.jaybulb.com/api/stories?limit=\(limit)") else { return [] }
     guard let (data, _) = try? await URLSession.shared.data(from: url) else { return [] }
     return (try? JSONDecoder().decode(StoriesResponse.self, from: data))?.stories ?? []
 }
@@ -25,7 +25,7 @@ struct StoriesCard: View {
         VStack(alignment: .leading) {
             Text("sidewise").bold()
             if stories.isEmpty {
-                Text("Could not reach sidewise.heyitsmejosh.com")
+                Text("Could not reach sidewise.jaybulb.com")
             } else {
                 ForEach(stories) { s in
                     Text("\(s.title) (\(s.sources.count) outlets)")

@@ -27,7 +27,7 @@ struct TopStoryProvider: TimelineProvider {
 
     /// The first story that more than one outlet covers, else the first story.
     static func topStory() async -> Story? {
-        guard let (data, _) = try? await URLSession.shared.data(from: URL(string: "https://sidewise.heyitsmejosh.com/api/stories?view=stories&limit=20")!),
+        guard let (data, _) = try? await URLSession.shared.data(from: URL(string: "https://sidewise.jaybulb.com/api/stories?view=stories&limit=20")!),
               let feed = try? JSONDecoder().decode(Feed.self, from: data) else { return nil }
         let stories = feed.stories.map(\.coherent)
         return comparableStories(stories).first ?? stories.first
@@ -49,7 +49,7 @@ struct TopStoryView: View {
                 BiasBar(story: story, height: 6)
                 Text(footer(story)).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
             }
-            .widgetURL(URL(string: "https://sidewise.heyitsmejosh.com"))
+            .widgetURL(URL(string: "https://sidewise.jaybulb.com"))
         } else {
             Text("Open Sidewise to load the news.").font(.footnote).foregroundStyle(.secondary)
         }
