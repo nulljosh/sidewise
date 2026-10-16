@@ -177,3 +177,7 @@ Shareable filters and Back navigation, safe headline rendering, a retry button, 
 
 ## Ingested 2026-10-05
 - [ ] QA
+
+## Ingested 2026-10-16
+- [ ] Needs iOS App Store ship (iOS 1.0 waiting for review; the store page is Mac only). (screenshot: notes/attachments/2026-10-16/inkpress-and-sidewise-2.png)
+- [ ] Needs iOS App Store ship (iOS 1.0 waiting for review; the store page is Mac only). (screenshot: notes/attachments/2026-10-16/inkpress-and-sidewise-2.png)
