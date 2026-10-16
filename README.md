@@ -12,7 +12,7 @@ and flags the **blindspots**: stories only one side is covering. Free. No accoun
 Two feeds from one newsroom count as one voice. A publisher can't run an opinion section next
 to its main feed and call that two sources.
 
-Five ways in: a [web reader](https://sidewise.heyitsmejosh.com), native [iPhone, iPad and Mac apps](https://sidewise.heyitsmejosh.com/app), a JSON API, an MCP server, and a terminal client (`swift build && ./.build/debug/sidewise-tui 5` — see [tui/](tui/)).
+Five ways in: a [web reader](https://sidewise.jaybulb.com), native [iPhone, iPad and Mac apps](https://sidewise.jaybulb.com/app), a JSON API, an MCP server, and a terminal client (`swift build && ./.build/debug/sidewise-tui 5` — see [tui/](tui/)).
 
 <img src="progress.svg" width="460">
 
@@ -50,7 +50,7 @@ xcodebuild -scheme Sidewise-iOS -destination 'generic/platform=iOS Simulator' bu
 ## MCP
 
 ```
-claude mcp add --transport http sidewise https://sidewise.heyitsmejosh.com/mcp
+claude mcp add --transport http sidewise https://sidewise.jaybulb.com/mcp
 ```
 
 | Tool | Params | Returns |
@@ -67,7 +67,7 @@ Stateless streamable HTTP, no auth. Works with any MCP client: Claude Desktop, C
 
 ## API
 
-`GET https://sidewise.heyitsmejosh.com/api/stories`. Every parameter is optional.
+`GET https://sidewise.jaybulb.com/api/stories`. Every parameter is optional.
 
 | Param | Values | Default |
 |---|---|---|
@@ -85,8 +85,8 @@ half are down, so you can point a monitor at it as is. `GET /api/sources` lists 
 its bias, its side and its parent newsroom.
 
 ```bash
-curl 'https://sidewise.heyitsmejosh.com/api/stories?view=stories&blindspot=true'
-curl 'https://sidewise.heyitsmejosh.com/api/stories?view=latest&outlet=Hacker%20News&limit=10'
+curl 'https://sidewise.jaybulb.com/api/stories?view=stories&blindspot=true'
+curl 'https://sidewise.jaybulb.com/api/stories?view=latest&outlet=Hacker%20News&limit=10'
 ```
 
 ```json
@@ -108,7 +108,7 @@ curl 'https://sidewise.heyitsmejosh.com/api/stories?view=latest&outlet=Hacker%20
 }
 ```
 
-CORS is open. Feeds are re-pulled at most every 2 minutes. Responses are `no-store` (see below). `ts` is epoch ms, or `0` when the feed gave no date. Those sort to the bottom. Full spec: [`openapi.yaml`](https://sidewise.heyitsmejosh.com/openapi.yaml) · orientation for agents: [`llms.txt`](https://sidewise.heyitsmejosh.com/llms.txt).
+CORS is open. Feeds are re-pulled at most every 2 minutes. Responses are `no-store` (see below). `ts` is epoch ms, or `0` when the feed gave no date. Those sort to the bottom. Full spec: [`openapi.yaml`](https://sidewise.jaybulb.com/openapi.yaml) · orientation for agents: [`llms.txt`](https://sidewise.jaybulb.com/llms.txt).
 
 ## How it works
 
