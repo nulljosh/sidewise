@@ -1,0 +1,7 @@
+/* Sidewise brand tokens. The accent is the only colour this app owns; spacing, radii and type come from the shared system. */
+:root {
+  --accent: #e69a00;
+  --accent-light: #ffcc33;
+  --accent-deep: #e69a00;
+  --accent-ring: color-mix(in srgb, #e69a00 30%, transparent);
+}
