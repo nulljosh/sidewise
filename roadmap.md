@@ -1,5 +1,7 @@
 # Sidewise Roadmap
 
+> Priority tier 2 (2026-10-17): ship push, this week. Order: live blockers, ship pushes, active features, portfolio, exploratory. See ~/Documents/Code/LOOP-HANDOFF.md.
+
 ## 2026-10-05, iOS rebuilt after the 4.3 and 4.2.6 rejection
 
 Apple read the iOS app as a thin feed list that overlaps Inkpress. The same 1.0 now has its own
